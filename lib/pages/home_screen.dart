@@ -3,14 +3,23 @@ import 'package:blog_app/widgets/custom_card.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
   @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xffF4F4F4),
       appBar: AppBar(
-        title: const Text("Blog"),
+        leading: IconButton(
+          icon: const Icon(Icons.menu),
+          onPressed: () {},
+        ),
       ),
       body: SafeArea(
         child: Padding(
@@ -18,6 +27,13 @@ class HomeScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              Text(
+                "Hoşgeldiniz",
+                style: GoogleFonts.poppins(
+                  color: const Color(0xFF7D7D7D),
+                  fontSize: 20,
+                ),
+              ),
               Text(
                 'Son Eklenenler',
                 style: GoogleFonts.poppins(
@@ -31,7 +47,9 @@ class HomeScreen extends StatelessWidget {
                   scrollDirection: Axis.horizontal,
                   itemCount: 10,
                   itemBuilder: (context, index) {
-                    return const CustomCard();
+                    return const CustomCard(
+                      isLastAdded: true,
+                    );
                   },
                 ),
               ),
@@ -43,14 +61,11 @@ class HomeScreen extends StatelessWidget {
                 ),
               ),
               Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 8.0),
-                  child: ListView.builder(
-                    itemCount: 10,
-                    itemBuilder: (context, index) {
-                      return const CustomCard();
-                    },
-                  ),
+                child: ListView.builder(
+                  itemCount: 10,
+                  itemBuilder: (context, index) {
+                    return const CustomCard();
+                  },
                 ),
               ),
             ],
