@@ -11,14 +11,13 @@ class BlogApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
       theme: ThemeData(
+        scaffoldBackgroundColor: const Color(0xffF4F4F4),
         appBarTheme: const AppBarTheme(
-          iconTheme: IconThemeData(
-            color: Colors.white,
-          ),
+          backgroundColor: Color(0xffF4F4F4),
         ),
       ),
+      debugShowCheckedModeBanner: false,
       home: const HomeScreen(),
     );
   }

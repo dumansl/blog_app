@@ -69,6 +69,9 @@ class _BlogDetailsState extends State<BlogDetails> {
             left: 0,
             right: 0,
             child: AppBar(
+              iconTheme: const IconThemeData(
+                color: Colors.white,
+              ),
               backgroundColor: Colors.transparent,
               elevation: 0,
               actions: [

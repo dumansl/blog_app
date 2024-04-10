@@ -1,4 +1,5 @@
 import 'package:blog_app/constants/constants.dart';
+import 'package:blog_app/pages/pages.dart';
 import 'package:blog_app/widgets/custom_card.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -14,16 +15,24 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xffF4F4F4),
       appBar: AppBar(
         backgroundColor: const Color(0xffF4F4F4),
-        leading: IconButton(
-          icon: const Icon(
-            Icons.menu,
-            size: 30,
+        actions: [
+          IconButton(
+            icon: const Icon(
+              Icons.edit_square,
+              size: 30,
+            ),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const BlogEditScreen(),
+                ),
+              );
+            },
           ),
-          onPressed: () {},
-        ),
+        ],
       ),
       body: SafeArea(
         child: Padding(
