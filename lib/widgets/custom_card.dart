@@ -4,8 +4,19 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class CustomCard extends StatelessWidget {
+  final String blogTitle;
+  final String blogContent;
+  final String imagePath;
+  final String authorName;
   final bool isLastAdded;
-  const CustomCard({super.key, this.isLastAdded = false});
+  const CustomCard({
+    super.key,
+    this.isLastAdded = false,
+    required this.blogTitle,
+    required this.blogContent,
+    required this.imagePath,
+    required this.authorName,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +25,11 @@ class CustomCard extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => const BlogDetails(),
+            builder: (context) => BlogDetails(
+                blogTitle: blogTitle,
+                blogContent: blogContent,
+                imagePath: imagePath,
+                authorName: authorName),
           ),
         );
       },
@@ -26,11 +41,11 @@ class CustomCard extends StatelessWidget {
           color: Colors.white,
           borderRadius: BorderRadius.circular(16),
           image: isLastAdded
-              ? const DecorationImage(
-                  image: AssetImage(
-                    "assets/background_image.jpg",
+              ? DecorationImage(
+                  image: NetworkImage(
+                    imagePath,
                   ),
-                  fit: BoxFit.fill)
+                  fit: BoxFit.cover)
               : null,
           boxShadow: [
             BoxShadow(
@@ -53,9 +68,9 @@ class CustomCard extends StatelessWidget {
                 width: ScreenUtil.getHeight(context) * 0.1,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(16),
-                  image: const DecorationImage(
-                    image: AssetImage(
-                      "assets/background_image.jpg",
+                  image: DecorationImage(
+                    image: NetworkImage(
+                      imagePath,
                     ),
                     fit: BoxFit.cover,
                   ),
@@ -68,7 +83,7 @@ class CustomCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   Text(
-                    'Blog Title',
+                    blogTitle,
                     style: GoogleFonts.poppins(
                       color: isLastAdded ? Colors.white : Colors.black,
                       fontSize: 16,
@@ -77,7 +92,7 @@ class CustomCard extends StatelessWidget {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam mattis, mauris vel tincidunt tempus, libero leo imperdiet ligula, a eleifend justo nibh molestie mi. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut posuere, tellus non dapibus mattis, nisl augue tempor lacus, non volutpat sem diam nec orci. Vivamus tempor volutpat lacus, vel pharetra leo vulputate quis.',
+                    blogContent,
                     style: GoogleFonts.poppins(
                       color: isLastAdded ? Colors.white : Colors.black,
                       fontSize: 14,
@@ -98,7 +113,7 @@ class CustomCard extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        'Author Name',
+                        authorName,
                         style: GoogleFonts.poppins(
                           color: isLastAdded ? Colors.white : Colors.black,
                           fontSize: 12,

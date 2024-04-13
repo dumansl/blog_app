@@ -4,7 +4,17 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class BlogDetails extends StatefulWidget {
-  const BlogDetails({super.key});
+  final String blogTitle;
+  final String blogContent;
+  final String imagePath;
+  final String authorName;
+
+  const BlogDetails(
+      {super.key,
+      required this.blogTitle,
+      required this.blogContent,
+      required this.imagePath,
+      required this.authorName});
 
   @override
   State<BlogDetails> createState() => _BlogDetailsState();
@@ -20,10 +30,10 @@ class _BlogDetailsState extends State<BlogDetails> {
             padding: const EdgeInsets.symmetric(horizontal: 24),
             height: ScreenUtil.getHeight(context) * 0.6,
             width: ScreenUtil.getWidth(context),
-            decoration: const BoxDecoration(
+            decoration: BoxDecoration(
               image: DecorationImage(
-                image: AssetImage(
-                  "assets/background_image.jpg",
+                image: NetworkImage(
+                  widget.imagePath,
                 ),
                 fit: BoxFit.cover,
               ),
@@ -33,7 +43,7 @@ class _BlogDetailsState extends State<BlogDetails> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Blog Title',
+                  widget.blogTitle,
                   style: GoogleFonts.poppins(
                     color: Colors.white,
                     fontSize: 32,
@@ -53,7 +63,7 @@ class _BlogDetailsState extends State<BlogDetails> {
                       ),
                     ),
                     Text(
-                      'Author Name',
+                      widget.authorName,
                       style: GoogleFonts.poppins(
                         color: Colors.white,
                         fontSize: 16,
@@ -94,6 +104,7 @@ class _BlogDetailsState extends State<BlogDetails> {
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
               height: ScreenUtil.getHeight(context) * 0.55,
+              width: ScreenUtil.getWidth(context),
               decoration: const BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.vertical(
@@ -102,7 +113,7 @@ class _BlogDetailsState extends State<BlogDetails> {
               ),
               child: SingleChildScrollView(
                 child: Text(
-                  "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec blandit eros quis viverra suscipit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent semper aliquam velit non sagittis. Ut imperdiet volutpat erat, quis blandit velit commodo auctor. Nulla fermentum odio tellus, nec scelerisque leo tristique a. In pretium diam quis erat sagittis, nec fermentum ipsum viverra. Integer dolor odio, ultrices non libero ac, commodo ultrices orci. Nullam non felis elit. Curabitur eu magna venenatis, aliquet purus nec, pretium libero. Morbi mauris ipsum, sagittis et porta et, aliquet sed eros. Morbi ligula ipsum, dignissim in quam a, vestibulum interdum lectus. In rhoncus sapien non consequat eleifend. In consequat ullamcorper massa, nec posuere ipsum sagittis sed. Quisque leo ligula, pellentesque id ultricies sed, malesuada in erat. Praesent id urna eu ex laoreet iaculis sed non dolor. Donec in erat ut leo consectetur suscipit vitae vitae nisl. Nulla a metus lacinia, laoreet velit at, ultricies est. Donec vel consectetur turpis. Phasellus euismod ligula ac convallis dapibus. Etiam vitae dictum mi, eu posuere metus. Nulla gravida massa non ligula gravida tempor. Phasellus mi elit, vestibulum non efficitur quis, porta non augue. Curabitur porttitor erat non enim fringilla, vel lacinia ante tempus. Aliquam in ex ipsum. Nulla nulla libero, pharetra vel diam eget, pellentesque lobortis dui. Phasellus id arcu eget lectus pellentesque suscipit eu tristique massa. Pellentesque quis ornare erat.",
+                  widget.blogContent,
                   style: GoogleFonts.poppins(
                     fontSize: 16,
                   ),

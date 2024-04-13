@@ -6,7 +6,7 @@ final blogServiceProvider = Provider<BlogServices>((ref) {
   return BlogServices();
 });
 
-final articlesProvider = FutureProvider<List<BlogPost>>((ref) async {
+final blogProvider = FutureProvider<List<BlogPost>>((ref) async {
   final blogServices = ref.watch(blogServiceProvider);
   return blogServices.getBlog();
 });
