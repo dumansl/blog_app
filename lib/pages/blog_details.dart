@@ -27,7 +27,6 @@ class _BlogDetailsState extends State<BlogDetails> {
       body: Stack(
         children: [
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 24),
             height: ScreenUtil.getHeight(context) * 0.6,
             width: ScreenUtil.getWidth(context),
             decoration: BoxDecoration(
@@ -38,38 +37,51 @@ class _BlogDetailsState extends State<BlogDetails> {
                 fit: BoxFit.cover,
               ),
             ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
+            child: Stack(
               children: [
-                Text(
-                  widget.blogTitle,
-                  style: GoogleFonts.poppins(
-                    color: Colors.white,
-                    fontSize: 32,
-                    fontWeight: FontWeight.w600,
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.black.withOpacity(0.4),
+                    borderRadius: BorderRadius.circular(16),
                   ),
                 ),
-                const SizedBox(height: 8),
-                Row(
-                  children: [
-                    Container(
-                      margin: const EdgeInsets.only(right: 8),
-                      height: ScreenUtil.getHeight(context) * 0.04,
-                      width: ScreenUtil.getHeight(context) * 0.04,
-                      decoration: const BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.grey,
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 24),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        widget.blogTitle,
+                        style: GoogleFonts.poppins(
+                          color: Colors.white,
+                          fontSize: 32,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
-                    ),
-                    Text(
-                      widget.authorName,
-                      style: GoogleFonts.poppins(
-                        color: Colors.white,
-                        fontSize: 16,
+                      const SizedBox(height: 8),
+                      Row(
+                        children: [
+                          Container(
+                            margin: const EdgeInsets.only(right: 8),
+                            height: ScreenUtil.getHeight(context) * 0.04,
+                            width: ScreenUtil.getHeight(context) * 0.04,
+                            decoration: const BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.black,
+                            ),
+                          ),
+                          Text(
+                            widget.authorName,
+                            style: GoogleFonts.poppins(
+                              color: Colors.white,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ],
             ),

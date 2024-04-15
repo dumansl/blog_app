@@ -1,9 +1,9 @@
-import 'dart:io';
-
-import 'package:blog_app/constants/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:blog_app/widgets/snack_bar.dart';
+import 'package:blog_app/constants/constants.dart';
+import 'package:blog_app/services/blog_services.dart';
 
 class BlogEditScreen extends StatefulWidget {
   const BlogEditScreen({super.key});
@@ -13,28 +13,59 @@ class BlogEditScreen extends StatefulWidget {
 }
 
 class _BlogEditScreenState extends State<BlogEditScreen> {
-  final FocusNode _focusNode = FocusNode();
-  File? image;
+  final TextEditingController _titleController = TextEditingController();
+  final TextEditingController _contentController = TextEditingController();
+  final TextEditingController _authorController = TextEditingController();
+  XFile? _image;
+  bool _isImageSelected =
+      false; // Resmin seçilip seçilmediğini kontrol etmek için
 
-  @override
-  void initState() {
-    super.initState();
-    _focusNode.requestFocus();
-  }
-
-  @override
-  void dispose() {
-    _focusNode.dispose();
-    super.dispose();
-  }
+  final _blogService = BlogServices();
 
   Future<void> _getImage() async {
     final pickedFile =
         await ImagePicker().pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
       setState(() {
-        image = File(pickedFile.path);
+        _image = XFile(pickedFile.path);
+        _isImageSelected = true; // Resim seçildiğinde true yap
       });
+    }
+  }
+
+  Future<void> _sendBlogPost() async {
+    final title = _titleController.text;
+    final content = _contentController.text;
+    final author = _authorController.text;
+
+    if (title.isNotEmpty && content.isNotEmpty && author.isNotEmpty) {
+      try {
+        await _blogService.addBlogPost(
+          title: title,
+          content: content,
+          author: author,
+          image: _image,
+        );
+
+        _titleController.clear();
+        _contentController.clear();
+        _authorController.clear();
+        setState(() {
+          _image = null;
+          _isImageSelected = false; // Blog gönderildiğinde false yap
+        });
+        if (mounted) {
+          snackBar(context, "Blog başarıyla eklendi", bgColor: Colors.green);
+        }
+      } catch (error) {
+        if (mounted) {
+          snackBar(context, "Blog ekleme başarısız oldu.");
+        }
+      }
+    } else {
+      if (mounted) {
+        snackBar(context, "Blog ekleme başarısız oldu.");
+      }
     }
   }
 
@@ -43,7 +74,7 @@ class _BlogEditScreenState extends State<BlogEditScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "Blog Edit",
+          "Blog Ekleme",
           style: GoogleFonts.poppins(
             fontSize: 18,
             fontWeight: FontWeight.w500,
@@ -59,8 +90,7 @@ class _BlogEditScreenState extends State<BlogEditScreen> {
             children: <Widget>[
               editFrame(
                 child: TextFormField(
-                  autofocus: true,
-                  focusNode: _focusNode,
+                  controller: _titleController,
                   decoration: InputDecoration(
                     labelText: 'Blog Başlığı',
                     labelStyle: GoogleFonts.poppins(
@@ -76,6 +106,7 @@ class _BlogEditScreenState extends State<BlogEditScreen> {
               ),
               editFrame(
                 child: TextFormField(
+                  controller: _contentController,
                   decoration: InputDecoration(
                     labelText: 'Blog İçeriği',
                     isDense: true,
@@ -91,6 +122,7 @@ class _BlogEditScreenState extends State<BlogEditScreen> {
               ),
               editFrame(
                 child: TextFormField(
+                  controller: _authorController,
                   decoration: InputDecoration(
                     labelText: 'Yazar',
                     labelStyle: GoogleFonts.poppins(
@@ -103,22 +135,32 @@ class _BlogEditScreenState extends State<BlogEditScreen> {
                   maxLines: 1,
                 ),
               ),
-              InkWell(
-                onTap: _getImage,
-                child: editFrame(
-                  child: Text(
-                    "Resim Ekle",
-                    style: GoogleFonts.poppins(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  InkWell(
+                    onTap: _getImage,
+                    child: editFrame(
+                      child: Text(
+                        "Resim Ekle",
+                        style: GoogleFonts.poppins(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
                     ),
                   ),
-                ),
+                  if (_isImageSelected)
+                    const Padding(
+                      padding: EdgeInsets.only(left: 16),
+                      child: Icon(Icons.check_box, color: Colors.green),
+                    ),
+                ],
               ),
               const SizedBox(height: 32),
               Center(
                 child: InkWell(
-                  onTap: () {},
+                  onTap: _sendBlogPost,
                   child: SizedBox(
                     height: ScreenUtil.getHeight(context) * 0.09,
                     width: ScreenUtil.getWidth(context) * 0.5,

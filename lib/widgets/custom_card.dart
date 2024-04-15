@@ -1,4 +1,3 @@
-import 'package:blog_app/constants/constants.dart';
 import 'package:blog_app/pages/pages.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -34,18 +33,16 @@ class CustomCard extends StatelessWidget {
         );
       },
       child: Container(
-        padding: const EdgeInsets.all(8),
         margin: const EdgeInsets.only(top: 8, bottom: 8, right: 8),
-        width: ScreenUtil.getWidth(context) * 0.5,
+        width: MediaQuery.of(context).size.width * 0.5,
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(16),
           image: isLastAdded
               ? DecorationImage(
-                  image: NetworkImage(
-                    imagePath,
-                  ),
-                  fit: BoxFit.cover)
+                  image: NetworkImage(imagePath),
+                  fit: BoxFit.cover,
+                )
               : null,
           boxShadow: [
             BoxShadow(
@@ -59,67 +56,81 @@ class CustomCard extends StatelessWidget {
             ),
           ],
         ),
-        child: Row(
+        child: Stack(
           children: [
-            if (!isLastAdded) ...[
+            if (isLastAdded)
               Container(
-                margin: const EdgeInsets.only(right: 8),
-                height: ScreenUtil.getHeight(context) * 0.1,
-                width: ScreenUtil.getHeight(context) * 0.1,
                 decoration: BoxDecoration(
+                  color: Colors.black.withOpacity(0.4),
                   borderRadius: BorderRadius.circular(16),
-                  image: DecorationImage(
-                    image: NetworkImage(
-                      imagePath,
-                    ),
-                    fit: BoxFit.cover,
-                  ),
                 ),
               ),
-            ],
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.end,
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
                 children: [
-                  Text(
-                    blogTitle,
-                    style: GoogleFonts.poppins(
-                      color: isLastAdded ? Colors.white : Colors.black,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    blogContent,
-                    style: GoogleFonts.poppins(
-                      color: isLastAdded ? Colors.white : Colors.black,
-                      fontSize: 14,
-                    ),
-                    maxLines: isLastAdded ? 2 : 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  const SizedBox(height: 4),
-                  Row(
-                    children: [
-                      Container(
-                        margin: const EdgeInsets.only(right: 8),
-                        height: ScreenUtil.getHeight(context) * 0.033,
-                        width: ScreenUtil.getHeight(context) * 0.033,
-                        decoration: const BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Colors.grey,
+                  if (!isLastAdded) ...[
+                    Container(
+                      margin: const EdgeInsets.only(right: 8),
+                      height: MediaQuery.of(context).size.height * 0.1,
+                      width: MediaQuery.of(context).size.height * 0.1,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(16),
+                        image: DecorationImage(
+                          image: NetworkImage(imagePath),
+                          fit: BoxFit.cover,
                         ),
                       ),
-                      Text(
-                        authorName,
-                        style: GoogleFonts.poppins(
-                          color: isLastAdded ? Colors.white : Colors.black,
-                          fontSize: 12,
+                    ),
+                  ],
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Text(
+                          blogTitle,
+                          style: GoogleFonts.poppins(
+                            color: isLastAdded ? Colors.white : Colors.black,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
-                      ),
-                    ],
+                        const SizedBox(height: 4),
+                        Text(
+                          blogContent,
+                          style: GoogleFonts.poppins(
+                            color: isLastAdded ? Colors.white : Colors.black,
+                            fontSize: 14,
+                          ),
+                          maxLines: isLastAdded ? 2 : 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        const SizedBox(height: 4),
+                        Row(
+                          children: [
+                            Container(
+                              margin: const EdgeInsets.only(right: 8),
+                              height:
+                                  MediaQuery.of(context).size.height * 0.033,
+                              width: MediaQuery.of(context).size.height * 0.033,
+                              decoration: const BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Colors.black,
+                              ),
+                            ),
+                            Text(
+                              authorName,
+                              style: GoogleFonts.poppins(
+                                color:
+                                    isLastAdded ? Colors.white : Colors.black,
+                                fontSize: 12,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),

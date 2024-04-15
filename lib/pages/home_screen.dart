@@ -18,7 +18,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color(0xffF4F4F4),
         actions: [
           IconButton(
             icon: const Icon(
