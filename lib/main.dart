@@ -1,6 +1,8 @@
+import 'package:blog_app/blocs/articles/article_bloc.dart';
 import 'package:blog_app/pages/pages.dart';
+import 'package:blog_app/repositories/article_repository.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 void main() {
   runApp(const BlogApp());
@@ -11,7 +13,8 @@ class BlogApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ProviderScope(
+    return BlocProvider(
+      create: (context) => ArticleBloc(articleRepository: ArticleRepository()),
       child: MaterialApp(
         theme: ThemeData(
           scaffoldBackgroundColor: const Color(0xffF4F4F4),

@@ -1,26 +1,22 @@
-import 'dart:convert';
-import 'package:blog_app/model/blog_model.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
+import 'package:blog_app/models/blog.dart';
+import 'dart:convert';
 
-class BlogServices {
-  final String apiUrl = "https://tobetoapi.halitkalayci.com/api/Articles";
+import 'package:http/http.dart' as http;
 
-  Future<List<BlogPost>> getBlog() async {
-    final response = await http.get(Uri.parse(apiUrl));
+class ArticleRepository {
+  Future<List<Blog>> fetchAll() async {
+    Uri url = Uri.parse("https://tobetoapi.halitkalayci.com/api/Articles");
 
-    if (response.statusCode == 200) {
-      List<dynamic> data = json.decode(response.body);
-      debugPrint(data.toString());
+    final response = await http.get(url);
 
-      return data.map((json) => BlogPost.fromJson(json)).toList();
-    } else {
-      throw Exception('Failed to load blogs');
-    }
+    final List body = json.decode(response.body);
+
+    return body.map((element) => Blog.fromJson(element)).toList();
   }
 
-  Future<void> addBlogPost({
+  Future<bool> addArticle({
     required String title,
     required String content,
     required String author,
@@ -41,12 +37,13 @@ class BlogServices {
       final response = await request.send();
 
       if (response.statusCode == 201) {
-        debugPrint("Blog başarıyla eklendi");
+        return true;
       } else {
-        debugPrint("Blog yazısı eklenemedi");
+        return false;
       }
     } catch (error) {
       debugPrint('Network error: $error');
+      return false;
     }
   }
 }

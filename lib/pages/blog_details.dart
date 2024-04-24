@@ -1,5 +1,4 @@
 import 'package:blog_app/constants/constants.dart';
-import 'package:blog_app/pages/pages.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -96,19 +95,19 @@ class _BlogDetailsState extends State<BlogDetails> {
               ),
               backgroundColor: Colors.transparent,
               elevation: 0,
-              actions: [
-                IconButton(
-                  icon: const Icon(Icons.edit_square),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const BlogEditScreen(),
-                      ),
-                    );
-                  },
-                ),
-              ],
+              // actions: [
+              //   IconButton(
+              //     icon: const Icon(Icons.edit_square),
+              //     onPressed: () {
+              //       Navigator.push(
+              //         context,
+              //         MaterialPageRoute(
+              //           builder: (context) => const BlogEditScreen(),
+              //         ),
+              //       );
+              //     },
+              //   ),
+              // ],
             ),
           ),
           Align(
