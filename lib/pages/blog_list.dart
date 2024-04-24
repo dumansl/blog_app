@@ -77,12 +77,19 @@ class _BlogListScreenState extends State<BlogListScreen> {
                   height: ScreenUtil.getHeight(context) * 0.35,
                   child: ListView.builder(
                     scrollDirection: Axis.horizontal,
-                    itemBuilder: (ctx, index) => CustomCard(
+                    itemBuilder: (ctx, index) {
+                      if (index >= state.blogs.length || index >= 5) {
+                        return const SizedBox();
+                      }
+                      final reversedIndex = state.blogs.length - 1 - index;
+                      return CustomCard(
                         isLastAdded: true,
-                        blogTitle: state.blogs[index].title!,
-                        blogContent: state.blogs[index].content!,
-                        imagePath: state.blogs[index].thumbnail!,
-                        authorName: state.blogs[index].author!),
+                        blogTitle: state.blogs[reversedIndex].title!,
+                        blogContent: state.blogs[reversedIndex].content!,
+                        imagePath: state.blogs[reversedIndex].thumbnail!,
+                        authorName: state.blogs[reversedIndex].author!,
+                      );
+                    },
                     itemCount: state.blogs.length > 5 ? 5 : state.blogs.length,
                   ),
                 ),
