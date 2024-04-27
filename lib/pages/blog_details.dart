@@ -1,19 +1,18 @@
+import 'package:blog_app/blocs/articles/article_bloc.dart';
+import 'package:blog_app/blocs/articles/article_event.dart';
 import 'package:blog_app/constants/constants.dart';
+import 'package:blog_app/models/blog.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class BlogDetails extends StatefulWidget {
-  final String blogTitle;
-  final String blogContent;
-  final String imagePath;
-  final String authorName;
+  final Blog blog;
 
-  const BlogDetails(
-      {super.key,
-      required this.blogTitle,
-      required this.blogContent,
-      required this.imagePath,
-      required this.authorName});
+  const BlogDetails({
+    super.key,
+    required this.blog,
+  });
 
   @override
   State<BlogDetails> createState() => _BlogDetailsState();
@@ -31,7 +30,7 @@ class _BlogDetailsState extends State<BlogDetails> {
             decoration: BoxDecoration(
               image: DecorationImage(
                 image: NetworkImage(
-                  widget.imagePath,
+                  widget.blog.thumbnail!,
                 ),
                 fit: BoxFit.cover,
               ),
@@ -51,7 +50,7 @@ class _BlogDetailsState extends State<BlogDetails> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        widget.blogTitle,
+                        widget.blog.title!,
                         style: GoogleFonts.poppins(
                           color: Colors.white,
                           fontSize: 32,
@@ -71,7 +70,7 @@ class _BlogDetailsState extends State<BlogDetails> {
                             ),
                           ),
                           Text(
-                            widget.authorName,
+                            widget.blog.author!,
                             style: GoogleFonts.poppins(
                               color: Colors.white,
                               fontSize: 16,
@@ -95,19 +94,17 @@ class _BlogDetailsState extends State<BlogDetails> {
               ),
               backgroundColor: Colors.transparent,
               elevation: 0,
-              // actions: [
-              //   IconButton(
-              //     icon: const Icon(Icons.edit_square),
-              //     onPressed: () {
-              //       Navigator.push(
-              //         context,
-              //         MaterialPageRoute(
-              //           builder: (context) => const BlogEditScreen(),
-              //         ),
-              //       );
-              //     },
-              //   ),
-              // ],
+              actions: [
+                IconButton(
+                  icon: const Icon(Icons.delete),
+                  onPressed: () {
+                    context
+                        .read<ArticleBloc>()
+                        .add(DeleteArticles(widget.blog));
+                    Navigator.pop(context);
+                  },
+                ),
+              ],
             ),
           ),
           Align(
@@ -124,7 +121,7 @@ class _BlogDetailsState extends State<BlogDetails> {
               ),
               child: SingleChildScrollView(
                 child: Text(
-                  widget.blogContent,
+                  widget.blog.content!,
                   style: GoogleFonts.poppins(
                     fontSize: 16,
                   ),

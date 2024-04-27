@@ -9,3 +9,15 @@ class AddArticle extends ArticleEvent {
 
   AddArticle(this.blog);
 }
+
+class UpdateArticle extends ArticleEvent {
+  final Blog blog;
+
+  UpdateArticle(this.blog);
+}
+
+class DeleteArticles extends ArticleEvent {
+  final Blog blog;
+
+  DeleteArticles(this.blog);
+}

@@ -1,20 +1,15 @@
+import 'package:blog_app/models/blog.dart';
 import 'package:blog_app/pages/pages.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class CustomCard extends StatelessWidget {
-  final String blogTitle;
-  final String blogContent;
-  final String imagePath;
-  final String authorName;
+  final Blog blog;
   final bool isLastAdded;
   const CustomCard({
     super.key,
     this.isLastAdded = false,
-    required this.blogTitle,
-    required this.blogContent,
-    required this.imagePath,
-    required this.authorName,
+    required this.blog,
   });
 
   @override
@@ -24,11 +19,7 @@ class CustomCard extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => BlogDetails(
-                blogTitle: blogTitle,
-                blogContent: blogContent,
-                imagePath: imagePath,
-                authorName: authorName),
+            builder: (context) => BlogDetails(blog: blog),
           ),
         );
       },
@@ -40,7 +31,7 @@ class CustomCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(16),
           image: isLastAdded
               ? DecorationImage(
-                  image: NetworkImage(imagePath),
+                  image: NetworkImage(blog.thumbnail!),
                   fit: BoxFit.cover,
                 )
               : null,
@@ -77,7 +68,7 @@ class CustomCard extends StatelessWidget {
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(16),
                         image: DecorationImage(
-                          image: NetworkImage(imagePath),
+                          image: NetworkImage(blog.thumbnail!),
                           fit: BoxFit.cover,
                         ),
                       ),
@@ -89,7 +80,7 @@ class CustomCard extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         Text(
-                          blogTitle,
+                          blog.title!,
                           style: GoogleFonts.poppins(
                             color: isLastAdded ? Colors.white : Colors.black,
                             fontSize: 16,
@@ -98,7 +89,7 @@ class CustomCard extends StatelessWidget {
                         ),
                         const SizedBox(height: 4),
                         Text(
-                          blogContent,
+                          blog.content!,
                           style: GoogleFonts.poppins(
                             color: isLastAdded ? Colors.white : Colors.black,
                             fontSize: 14,
@@ -120,7 +111,7 @@ class CustomCard extends StatelessWidget {
                               ),
                             ),
                             Text(
-                              authorName,
+                              blog.author!,
                               style: GoogleFonts.poppins(
                                 color:
                                     isLastAdded ? Colors.white : Colors.black,

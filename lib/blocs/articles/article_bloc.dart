@@ -9,7 +9,9 @@ class ArticleBloc extends Bloc<ArticleEvent, ArticleState> {
 
   ArticleBloc({required this.articleRepository}) : super(ArticlesNotLoaded()) {
     on<FetchArticles>(_fetchArticles);
-    on<AddArticle>(_onAddArticle);
+    on<AddArticle>(_addArticles);
+    on<UpdateArticle>(_updatedArticles);
+    on<DeleteArticles>(_deleteArticles);
   }
 
   void _fetchArticles(FetchArticles event, Emitter<ArticleState> emit) async {
@@ -22,21 +24,45 @@ class ArticleBloc extends Bloc<ArticleEvent, ArticleState> {
     }
   }
 
-  Future<void> _onAddArticle(
-      AddArticle event, Emitter<ArticleState> emit) async {
+  void _addArticles(AddArticle event, Emitter<ArticleState> emit) async {
     emit(ArticlesLoading());
     try {
       final isAdded = await articleRepository.addArticle(
         title: event.blog.title!,
         content: event.blog.content!,
         author: event.blog.author!,
-        image: event.blog.thumbnail != null
-            ? XFile(event.blog.thumbnail!) // XFile olarak işle
-            : null, // Eğer resim yoksa null olarak bırak
+        image:
+            event.blog.thumbnail != null ? XFile(event.blog.thumbnail!) : null,
       );
       emit(ArticleAdded(isAdded: isAdded));
     } catch (_) {
-      emit(ArticlesLoadFail());
+      emit(ArticlesAddLoadFail());
+    }
+  }
+
+  void _updatedArticles(UpdateArticle event, Emitter<ArticleState> emit) async {
+    emit(ArticlesLoading());
+    try {
+      final isUpdated = await articleRepository.putArticle(
+        id: event.blog.id!,
+        title: event.blog.title!,
+        content: event.blog.content!,
+        author: event.blog.author!,
+        thumbnail: event.blog.thumbnail,
+      );
+      emit(ArticleUpdated(isUpdated: isUpdated));
+    } catch (_) {
+      emit(ArticleUpdateLoadFailed());
+    }
+  }
+
+  void _deleteArticles(DeleteArticles event, Emitter<ArticleState> emit) async {
+    emit(ArticlesLoading());
+    try {
+      final isDeleted = await articleRepository.deleteArticle(event.blog.id!);
+      emit(ArticleDeleted(isDeleted: isDeleted));
+    } catch (_) {
+      emit(ArticleDeletedLoadFailed());
     }
   }
 }

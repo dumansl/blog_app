@@ -46,4 +46,57 @@ class ArticleRepository {
       return false;
     }
   }
+
+  Future<bool> putArticle({
+    required String id,
+    required String title,
+    required String content,
+    required String author,
+    String? thumbnail,
+  }) async {
+    try {
+      Uri url =
+          Uri.parse("https://tobetoapi.halitkalayci.com/api/Articles/$id");
+
+      var requestBody = {
+        "title": title,
+        "content": content,
+        "author": author,
+        "thumbnail": thumbnail,
+      };
+
+      final response = await http.put(
+        url,
+        headers: {"Content-Type": "application/json"},
+        body: json.encode(requestBody),
+      );
+
+      if (response.statusCode == 200) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (error) {
+      debugPrint('Network error: $error');
+      return false;
+    }
+  }
+
+  Future<bool> deleteArticle(String id) async {
+    try {
+      Uri url =
+          Uri.parse("https://tobetoapi.halitkalayci.com/api/Articles/$id");
+
+      final response = await http.delete(url);
+
+      if (response.statusCode == 200) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (error) {
+      debugPrint('Network error: $error');
+      return false;
+    }
+  }
 }

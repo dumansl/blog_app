@@ -84,10 +84,7 @@ class _BlogListScreenState extends State<BlogListScreen> {
                       final reversedIndex = state.blogs.length - 1 - index;
                       return CustomCard(
                         isLastAdded: true,
-                        blogTitle: state.blogs[reversedIndex].title!,
-                        blogContent: state.blogs[reversedIndex].content!,
-                        imagePath: state.blogs[reversedIndex].thumbnail!,
-                        authorName: state.blogs[reversedIndex].author!,
+                        blog: state.blogs[reversedIndex],
                       );
                     },
                     itemCount: state.blogs.length > 5 ? 5 : state.blogs.length,
@@ -103,10 +100,8 @@ class _BlogListScreenState extends State<BlogListScreen> {
                 Expanded(
                   child: ListView.builder(
                     itemBuilder: (ctx, index) => CustomCard(
-                        blogTitle: state.blogs[index].title!,
-                        blogContent: state.blogs[index].content!,
-                        imagePath: state.blogs[index].thumbnail!,
-                        authorName: state.blogs[index].author!),
+                      blog: state.blogs[index],
+                    ),
                     itemCount: state.blogs.length,
                   ),
                 ),
