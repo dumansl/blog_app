@@ -47,7 +47,7 @@ class ArticleRepository {
     }
   }
 
-  Future<bool> putArticle({
+  Future<bool> updateArticle({
     required String id,
     required String title,
     required String content,
@@ -70,7 +70,7 @@ class ArticleRepository {
         headers: {"Content-Type": "application/json"},
         body: json.encode(requestBody),
       );
-
+      debugPrint(response.body.toString());
       if (response.statusCode == 200) {
         return true;
       } else {

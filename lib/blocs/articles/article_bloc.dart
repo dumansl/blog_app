@@ -43,7 +43,7 @@ class ArticleBloc extends Bloc<ArticleEvent, ArticleState> {
   void _updatedArticles(UpdateArticle event, Emitter<ArticleState> emit) async {
     emit(ArticlesLoading());
     try {
-      final isUpdated = await articleRepository.putArticle(
+      final isUpdated = await articleRepository.updateArticle(
         id: event.blog.id!,
         title: event.blog.title!,
         content: event.blog.content!,

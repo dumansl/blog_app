@@ -9,20 +9,37 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:blog_app/constants/constants.dart';
 
-class BlogEditScreen extends StatefulWidget {
-  const BlogEditScreen({super.key});
+class BlogEditOrCreateScreen extends StatefulWidget {
+  final Blog? blog;
+  const BlogEditOrCreateScreen({super.key, this.blog});
 
   @override
-  State<BlogEditScreen> createState() => _BlogEditScreenState();
+  State<BlogEditOrCreateScreen> createState() => _BlogEditOrCreateScreenState();
 }
 
-class _BlogEditScreenState extends State<BlogEditScreen> {
+class _BlogEditOrCreateScreenState extends State<BlogEditOrCreateScreen> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _contentController = TextEditingController();
   final TextEditingController _authorController = TextEditingController();
   XFile? _image;
   bool _isImageSelected = false;
+  bool _createPage = true;
+
+  @override
+  void initState() {
+    _createPage = widget.blog == null ? true : false;
+    if (widget.blog != null) {
+      _titleController.text = widget.blog!.title ?? '';
+      _contentController.text = widget.blog!.content ?? '';
+      _authorController.text = widget.blog!.author ?? '';
+      _image = widget.blog!.thumbnail != null
+          ? XFile(widget.blog!.thumbnail!)
+          : null;
+      _isImageSelected = _image != null;
+    }
+    super.initState();
+  }
 
   Future<void> _getImage() async {
     final pickedFile =
@@ -35,7 +52,7 @@ class _BlogEditScreenState extends State<BlogEditScreen> {
     }
   }
 
-  void _submit() {
+  void _create() {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
       final blog = Blog(
@@ -49,8 +66,27 @@ class _BlogEditScreenState extends State<BlogEditScreen> {
     }
   }
 
+  void _update() {
+    if (_formKey.currentState!.validate()) {
+      _formKey.currentState!.save();
+      final blog = Blog(
+        title: _titleController.text,
+        content: _contentController.text,
+        author: _authorController.text,
+        thumbnail: _image?.path,
+      );
+
+      context.read<ArticleBloc>().add(UpdateArticle(blog));
+    }
+  }
+
+  void _submit() async {
+    _createPage ? _create() : _update();
+  }
+
   @override
   Widget build(BuildContext context) {
+    debugPrint(_createPage.toString());
     return BlocListener<ArticleBloc, ArticleState>(
       listener: (context, state) {
         if (state is ArticleAdded) {
@@ -76,10 +112,42 @@ class _BlogEditScreenState extends State<BlogEditScreen> {
               );
             },
           );
+        } else if (state is ArticleUpdated) {
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return CustomAlertDialog(
+                text: "Başarılı",
+                content: 'Blog başarıyla güncellendi.',
+                buttonText: 'Tamam',
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  _titleController.clear();
+                  _contentController.clear();
+                  _authorController.clear();
+                  setState(
+                    () {
+                      _image = null;
+                      _isImageSelected = false;
+                    },
+                  );
+                },
+              );
+            },
+          );
         } else if (state is ArticlesLoadFail) {
           CustomAlertDialog(
             text: 'Hata',
             content: 'Blog gönderilirken bir hata oluştu.',
+            buttonText: 'Tamam',
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          );
+        } else if (state is ArticleUpdateLoadFailed) {
+          CustomAlertDialog(
+            text: 'Hata',
+            content: 'Blog güncellerken bir hata oluştu.',
             buttonText: 'Tamam',
             onPressed: () {
               Navigator.of(context).pop();
@@ -185,7 +253,7 @@ class _BlogEditScreenState extends State<BlogEditScreen> {
                         child: editFrame(
                           child: Center(
                             child: Text(
-                              "GÖNDER",
+                              _createPage ? "GÖNDER" : "GÜNCELLE",
                               style: GoogleFonts.poppins(
                                 fontSize: 18,
                                 fontWeight: FontWeight.w500,
