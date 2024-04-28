@@ -89,65 +89,42 @@ class _BlogEditOrCreateScreenState extends State<BlogEditOrCreateScreen> {
     debugPrint(_createPage.toString());
     return BlocListener<ArticleBloc, ArticleState>(
       listener: (context, state) {
-        if (state is ArticleAdded) {
+        if (state is ArticleAdded || state is ArticleUpdated) {
           showDialog(
             context: context,
             builder: (BuildContext context) {
               return CustomAlertDialog(
                 text: "Başarılı",
-                content: 'Blog başarıyla gönderildi.',
+                content: _createPage
+                    ? 'Blog başarıyla gönderildi.'
+                    : 'Blog başarıyla güncellendi.',
                 buttonText: 'Tamam',
                 onPressed: () {
-                  Navigator.of(context).pop();
-                  _titleController.clear();
-                  _contentController.clear();
-                  _authorController.clear();
-                  setState(
-                    () {
-                      _image = null;
-                      _isImageSelected = false;
-                    },
-                  );
+                  if (_createPage) {
+                    Navigator.of(context).pop();
+                    _titleController.clear();
+                    _contentController.clear();
+                    _authorController.clear();
+                    setState(
+                      () {
+                        _image = null;
+                        _isImageSelected = false;
+                      },
+                    );
+                  } else {
+                    Navigator.pop(context);
+                  }
                 },
               );
             },
           );
-        } else if (state is ArticleUpdated) {
-          showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return CustomAlertDialog(
-                text: "Başarılı",
-                content: 'Blog başarıyla güncellendi.',
-                buttonText: 'Tamam',
-                onPressed: () {
-                  Navigator.of(context).pop();
-                  _titleController.clear();
-                  _contentController.clear();
-                  _authorController.clear();
-                  setState(
-                    () {
-                      _image = null;
-                      _isImageSelected = false;
-                    },
-                  );
-                },
-              );
-            },
-          );
-        } else if (state is ArticlesLoadFail) {
+        } else if (state is ArticlesLoadFail ||
+            state is ArticleUpdateLoadFailed) {
           CustomAlertDialog(
             text: 'Hata',
-            content: 'Blog gönderilirken bir hata oluştu.',
-            buttonText: 'Tamam',
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          );
-        } else if (state is ArticleUpdateLoadFailed) {
-          CustomAlertDialog(
-            text: 'Hata',
-            content: 'Blog güncellerken bir hata oluştu.',
+            content: _createPage
+                ? 'Blog gönderilirken bir hata oluştu.'
+                : 'Blog güncellenirken bir hata oluştu.',
             buttonText: 'Tamam',
             onPressed: () {
               Navigator.of(context).pop();
