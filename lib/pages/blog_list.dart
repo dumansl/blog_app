@@ -17,7 +17,12 @@ class BlogListScreen extends StatefulWidget {
 class _BlogListScreenState extends State<BlogListScreen> {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ArticleBloc, ArticleState>(
+    return BlocConsumer<ArticleBloc, ArticleState>(
+      listener: (context, state) {
+        if (state is ArticleAdded || state is ArticleUpdated) {
+          context.read<ArticleBloc>().add(FetchArticles());
+        }
+      },
       builder: (context, state) {
         if (state is ArticlesNotLoaded) {
           context.read<ArticleBloc>().add(FetchArticles());
